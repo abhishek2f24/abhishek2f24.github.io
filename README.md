@@ -4,7 +4,6 @@
 
 The motive of this project is to showcase my current and future projects. This is the first version of my portfolio, more features will be added in future, feel free to drop your suggestions in <a href="https://github.com/abhishek2f24/portfolio/discussions">Discussions</a>
 
----
 
 ## Highlights
 
@@ -16,10 +15,8 @@ The motive of this project is to showcase my current and future projects. This i
 - **Responsive** for all screen sizes
 - Animations added using **react-spring** and **framer-motion**
 
----
 
 
----
 
 <h2>Libraries used</h2>
 
@@ -41,12 +38,10 @@ The motive of this project is to showcase my current and future projects. This i
 </table>
 
 <h2>License</h2>
-
-![GitHub](https://img.shields.io/github/license/abhishek2f24/portfolio?style=for-the-badge)
-
+Credits : <a href="https://github.com/BhavyaCodes">Bhavya</a>
 
 
-<!-- # TypeScript Next.js example
+ # TypeScript Next.js example
 
 This is a really simple project that shows the usage of Next.js with TypeScript.
 
@@ -86,4 +81,4 @@ When we run `next dev` the next time, Next.js will start looking for any `.ts` o
 
 Next.js has built-in TypeScript declarations, so we'll get autocompletion for Next.js' modules straight away.
 
-A `type-check` script is also added to `package.json`, which runs TypeScript's `tsc` CLI in `noEmit` mode to run type-checking separately. You can then include this, for example, in your `test` scripts. -->
+A `type-check` script is also added to `package.json`, which runs TypeScript's `tsc` CLI in `noEmit` mode to run type-checking separately. You can then include this, for example, in your `test` scripts. 
