@@ -1,4 +1,4 @@
-<h1 align="center"><a href="https://bhavya.dev">Bhavya.dev</a> - Abhishek Maurya Portfolio</h1>
+<h1 align="center"><a href="https://bhavya.dev">abhishek2f24.github.io</a> - Abhishek Maurya Portfolio</h1>
 
 ## Motive
 
