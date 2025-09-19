@@ -1,45 +1,159 @@
 <!doctype html>
-<html>
-  <body>
-    <input id="files" type="file" multiple>
-    <button id="upload">Upload</button>
-    <div id="status"></div>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Upload to Google Drive</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 16px; color:#111; }
+    h1 { font-size: 20px; margin-bottom: 6px; }
+    p { margin-top: 0; color:#444; }
+    #uploadBtn { background:#007bff;color:#fff;border:0;padding:12px 16px;border-radius:6px; cursor:pointer; font-size:16px; }
+    #uploadBtn:disabled { opacity:0.6; cursor:not-allowed; }
+    .file-row { border:1px solid #eee; padding:10px; margin-top:8px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; gap:12px; }
+    .status { font-size:13px; color:#333; }
+    .small { font-size:12px; color:#666; }
+    progress { width:200px; }
+  </style>
+</head>
+<body>
+  <h1>Upload files → Google Drive</h1>
+  <p class="small">Single button: pick multiple files. Files are converted to base64 in the browser and POSTed to your Apps Script web app (JSON). Replace <code>YOUR_WEBAPP_URL</code> below.</p>
 
-    <script>
-      const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbz7dX1iXwDeMpryHiVYh4QhZLixxzIaRt8uSMrHHdgFlvmJC9N5wmTG7Obg5Gi07wNW/exec"; // replace
+  <!-- hidden file input -->
+  <input id="fileInput" type="file" multiple style="display:none" />
 
-      function fileToBase64(file) {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = () => resolve(reader.result.split(',')[1]); // remove data:<mime>;base64,
-          reader.onerror = reject;
-          reader.readAsDataURL(file);
-        });
+  <!-- visible single button -->
+  <button id="uploadBtn">Select & Upload Files</button>
+
+  <div id="log"></div>
+
+  <script>
+    const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbw_5qunRDVLnznFjA3C2pONSatq_4om2Cjx7WSlEbAmDN_wLAFNhsObgwjV-xUmH4QH/exec"; // <-- REPLACE with your Apps Script web app URL
+
+    // Convert File to base64 (data URL) and return base64 portion
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result;
+          // result is like "data:<mime>;base64,AAAA..."
+          const base64 = result.split(',')[1];
+          resolve(base64);
+        };
+        reader.onerror = (err) => reject(err);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // UI helpers
+    const fileInput = document.getElementById('fileInput');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const log = document.getElementById('log');
+
+    uploadBtn.addEventListener('click', () => {
+      fileInput.click();
+    });
+
+    fileInput.addEventListener('change', async () => {
+      const files = Array.from(fileInput.files || []);
+      if (!files.length) return;
+      uploadBtn.disabled = true;
+      log.innerHTML = '';
+
+      for (const file of files) {
+        const row = document.createElement('div');
+        row.className = 'file-row';
+        row.innerHTML = `<div>
+                           <div class="status"><strong>${escapeHtml(file.name)}</strong> <span class="small">(${file.type || 'n/a'} — ${(file.size/1024/1024).toFixed(2)} MB)</span></div>
+                           <div id="msg"></div>
+                         </div>
+                         <div style="text-align:right">
+                           <progress max="100" value="0" id="prog"></progress>
+                         </div>`;
+        log.appendChild(row);
+
+        const msg = row.querySelector('#msg');
+        const prog = row.querySelector('#prog');
+
+        try {
+          msg.textContent = 'Converting to base64...';
+          const base64 = await fileToBase64(file);
+
+          // Optional: chunking could be added for big files (not implemented)
+          msg.textContent = 'Uploading...';
+
+          const payload = {
+            name: file.name,
+            mimeType: file.type || 'application/octet-stream',
+            base64: base64
+          };
+
+          // POST JSON with CORS mode
+          const controller = new AbortController();
+          const signal = controller.signal;
+
+          // Use fetch and update progress via simple fake progress while waiting (Apps Script won't stream back progress)
+          let progressValue = 0;
+          const progressInterval = setInterval(() => {
+            progressValue = Math.min(95, progressValue + Math.floor(Math.random()*6) + 1);
+            prog.value = progressValue;
+          }, 300);
+
+          const res = await fetch(WEBAPP_URL, {
+            method: "POST",
+            body: JSON.stringify(payload),
+            headers: { "Content-Type": "application/json" },
+            mode: "cors",
+            signal
+          });
+
+          clearInterval(progressInterval);
+          prog.value = 100;
+
+          if (!res.ok) {
+            const text = await res.text().catch(()=> 'No response body');
+            msg.innerHTML = `<span style="color:crimson">Upload failed — ${res.status} ${res.statusText}. ${escapeHtml(text)}</span>`;
+          } else {
+            // Expect JSON response from Apps Script
+            const j = await res.json().catch(async () => {
+              const t = await res.text();
+              throw new Error('Invalid JSON response: ' + t);
+            });
+
+            if (j.status && j.status === 'ok') {
+              msg.innerHTML = `<span style="color:green">Uploaded ✓ (name: ${escapeHtml(j.name)}, id: ${escapeHtml(j.id || '')})</span>`;
+            } else {
+              msg.innerHTML = `<span style="color:crimson">Error: ${escapeHtml(j.message || JSON.stringify(j))}</span>`;
+            }
+          }
+        } catch (err) {
+          prog.value = 0;
+          msg.innerHTML = `<span style="color:crimson">Error uploading ${escapeHtml(file.name)}: ${escapeHtml(err.message || err.toString())}</span>`;
+        }
       }
 
-      document.getElementById('upload').addEventListener('click', async () => {
-        const files = document.getElementById('files').files;
-        if (!files.length) return alert('Select files first');
-        const status = document.getElementById('status');
-        status.innerHTML = '';
+      uploadBtn.disabled = false;
+      // clear file input so the same files can be reselected if needed
+      fileInput.value = '';
+    });
 
-        for (const f of files) {
-          status.innerHTML += `<div>Uploading ${f.name} ...</div>`;
-          try {
-            const base64 = await fileToBase64(f);
-            const payload = { name: f.name, mimeType: f.type, base64 };
-            const res = await fetch(WEBAPP_URL, {
-              method: 'POST',
-              body: JSON.stringify(payload),
-              headers: { 'Content-Type': 'application/json' }
-            });
-            const j = await res.json();
-            status.innerHTML += `<div>Result: ${j.status} ${j.name || j.message}</div>`;
-          } catch (err) {
-            status.innerHTML += `<div style="color:red">Error uploading ${f.name}: ${err}</div>`;
-          }
-        }
+    // Simple HTML escape
+    function escapeHtml(s) {
+      if (!s) return '';
+      return s.replace(/[&<>"'`=\/]/g, function (c) {
+        return {
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;',
+          "'": '&#39;', '/': '&#x2F;', '`':'&#x60;', '=':'&#x3D;'
+        }[c];
       });
-    </script>
-  </body>
+    }
+
+    // Helpful reminder on page
+    const note = document.createElement('p');
+    note.className = 'small';
+    note.innerHTML = '<strong>Notes:</strong> Make sure your Apps Script Web App is deployed (Execute as: Me) and returns proper CORS headers (Access-Control-Allow-Origin). Large files (~>50MB) may fail due to Apps Script limits.';
+    document.body.appendChild(note);
+  </script>
+</body>
 </html>
