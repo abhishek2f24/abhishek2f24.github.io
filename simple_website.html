@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Upload to Google Drive</title>
+</head>
+<body>
+  <h2>Upload Files to Drive</h2>
+  <input type="file" id="fileInput" multiple>
+  <button onclick="uploadFiles()">Upload</button>
+  <p id="status"></p>
+
+  <script>
+    const UPLOAD_URL = "https://script.google.com/macros/s/AKfycbwsAPayQiEQPXe-agKvfeQXSVIT0hJ_B-9YfB2LpZ18ddUFWKCE6mHVGPV3c2d8Xsrf/exec";
+
+    async function uploadFiles() {
+      const files = document.getElementById("fileInput").files;
+      if (!files.length) {
+        alert("Please select files first!");
+        return;
+      }
+
+      for (let file of files) {
+        let formData = new FormData();
+        formData.append("file", file);
+
+        try {
+          let res = await fetch(UPLOAD_URL, {
+            method: "POST",
+            body: formData
+          });
+          let text = await res.text();
+          document.getElementById("status").innerHTML += `<br>${text}`;
+        } catch (err) {
+          document.getElementById("status").innerHTML += `<br>Error: ${err}`;
+        }
+      }
+    }
+  </script>
+</body>
+</html>
