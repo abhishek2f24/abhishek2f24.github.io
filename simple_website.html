@@ -1,26 +1,28 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Upload to Google Drive</title>
-  <style>
-    body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; text-align:center; }
-    h1 { font-size: 22px; }
-    form { margin-top: 20px; }
-    input[type="file"] { margin: 20px 0; }
-    button { background:#007bff; color:#fff; border:0; padding:12px 20px; border-radius:6px; cursor:pointer; font-size:16px; }
-    button:hover { background:#0056b3; }
-  </style>
+    <meta charset="UTF--8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Uploader</title>
+    <style>
+        body { font-family: sans-serif; display: grid; place-items: center; min-height: 100vh; background-color: #f4f4f9; margin: 0; }
+        .container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #333; }
+        input[type="file"] { border: 2px dashed #ddd; padding: 1.5rem; border-radius: 5px; cursor: pointer; }
+        button { display: block; width: 100%; padding: 0.8rem; margin-top: 1rem; border: none; background-color: #007bff; color: white; border-radius: 5px; font-size: 1rem; cursor: pointer; }
+        button:disabled { background-color: #aaa; }
+        #status { margin-top: 1rem; text-align: center; }
+    </style>
 </head>
 <body>
-  <h1>Upload Files → Google Drive</h1>
-  <p>Select one or more files and upload directly.</p>
-
-  <!-- IMPORTANT: name="file" is required -->
-  <form action="https://script.google.com/macros/s/AKfycbyVySTyw1-GlVxANEl5Jiu15-n5GUtpBPuobM7Bogq6gWXyCY5aSiTT-U38tdgSJHlA/exec" method="post" enctype="multipart/form-data">
-    <input type="file" name="file" multiple required />
-    <br>
-    <button type="submit">Upload</button>
-  </form>
+    <div class="container">
+        <h1>Upload Files to Drive</h1>
+        <form id="uploadForm">
+            <input type="file" id="fileInput" multiple required>
+            <button type="submit" id="submitButton">Upload</button>
+        </form>
+        <div id="status"></div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
