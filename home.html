@@ -1,212 +1,304 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bhatt Chess Academy | Where Every Move Counts</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bhatt Chess Academy | Royal Minds Play Here</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- Tailwind CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Tailwind Custom Theme -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            gold: "#D4AF37",
-            goldDark: "#B5942F",
-            blackDeep: "#0A0A0A",
-            blackSoft: "#1A1A1A",
-            graySoft: "#CFCFCF",
-          },
-          fontFamily: {
-            heading: ["Cinzel", "serif"],
-            body: ["Lato", "sans-serif"],
-          },
-        },
-      },
-    };
-  </script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            100: '#F9F1D8',
+                            300: '#EAD48F',
+                            400: '#D4AF37', // Classic Gold
+                            500: '#C5A028',
+                            600: '#A3831E',
+                            900: '#5C4809',
+                        },
+                        royal: {
+                            black: '#050505',
+                            dark: '#0f0f0f',
+                            card: '#141414'
+                        }
+                    },
+                    fontFamily: {
+                        heading: ['Cinzel', 'serif'],
+                        body: ['Lato', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'gold-gradient': 'linear-gradient(135deg, #D4AF37 0%, #F9F1D8 50%, #A3831E 100%)',
+                    }
+                }
+            }
+        }
+    </script>
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Styles for Gold Text Gradient */
+        .text-gold-gradient {
+            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        /* Gold Border Gradient */
+        .border-gold-gradient {
+            border-image: linear-gradient(to right, #bf953f, #fcf6ba, #aa771c) 1;
+        }
 
-  <style>
-    html { scroll-behavior: smooth; }
-
-    /* Gold Gradient Text */
-    .text-gold-grad {
-      background: linear-gradient(to right, #D4AF37, #F7E7B2, #D4AF37);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    /* Premium Hero Overlay */
-    .hero-overlay {
-      background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85));
-    }
-  </style>
+        /* Subtle Glow Animation */
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px #D4AF37, 0 0 10px #D4AF37; }
+            50% { box-shadow: 0 0 20px #D4AF37, 0 0 30px #A3831E; }
+            100% { box-shadow: 0 0 5px #D4AF37, 0 0 10px #D4AF37; }
+        }
+        .gold-glow:hover {
+            animation: glow 1.5s infinite alternate;
+        }
+    </style>
 </head>
+<body class="bg-royal-black text-gray-300 font-body antialiased selection:bg-gold-400 selection:text-black">
 
-<body class="bg-blackDeep text-white font-body">
+    <nav class="fixed w-full z-50 transition-all duration-300 bg-royal-black/80 backdrop-blur-md border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0 cursor-pointer">
+                    <a href="#" class="text-2xl font-heading font-bold text-gold-gradient tracking-wider">
+                        BHATT CHESS
+                    </a>
+                </div>
 
-  <!-- ========================= NAVBAR ========================= -->
-  <nav class="fixed top-0 left-0 w-full bg-blackSoft/80 backdrop-blur-lg z-50 border-b border-gold/20">
-    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-      
-      <!-- LOGO (Replace IMAGE HERE) -->
-      <!-- Replace YOUR LOGO inside the src="" -->
-      <div class="flex items-center gap-3">
-        <img src="YOUR_LOGO_HERE.png" class="w-12 h-12 object-contain" alt="logo">
-        <div>
-          <h1 class="text-gold font-heading font-bold text-xl tracking-wide">BHATT CHESS</h1>
-          <p class="text-xs text-graySoft">ACADEMY</p>
-        </div>
-      </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#home" class="text-gold-100 hover:text-gold-400 px-3 py-2 rounded-md text-sm font-medium transition duration-300 uppercase tracking-widest">Home</a>
+                        <a href="#programs" class="text-gray-300 hover:text-gold-400 px-3 py-2 rounded-md text-sm font-medium transition duration-300 uppercase tracking-widest">Programs</a>
+                        <a href="#benefits" class="text-gray-300 hover:text-gold-400 px-3 py-2 rounded-md text-sm font-medium transition duration-300 uppercase tracking-widest">Benefits</a>
+                        <a href="#gallery" class="text-gray-300 hover:text-gold-400 px-3 py-2 rounded-md text-sm font-medium transition duration-300 uppercase tracking-widest">Gallery</a>
+                        <a href="#contact" class="px-5 py-2 border border-gold-400 text-gold-400 rounded-sm hover:bg-gold-400 hover:text-black transition duration-300 text-sm font-bold uppercase tracking-widest">Contact</a>
+                    </div>
+                </div>
 
-      <div class="hidden md:flex gap-8 font-bold">
-        <a href="#programs" class="hover:text-gold transition">Programs</a>
-        <a href="#benefits" class="hover:text-gold transition">Benefits</a>
-        <a href="#gallery" class="hover:text-gold transition">Gallery</a>
-        <a href="#contact" class="hover:text-gold transition">Contact</a>
-      </div>
-    </div>
-  </nav>
-
-  <!-- ========================= HERO ========================= -->
-  <header class="h-[95vh] relative flex items-center justify-center">
-    <img src="https://images.unsplash.com/photo-1529699211952-734e80c4d42b?auto=format&fit=crop&w=1920&q=80"
-         class="absolute inset-0 w-full h-full object-cover opacity-40">
-    <div class="absolute inset-0 hero-overlay"></div>
-
-    <div class="relative z-10 text-center px-6">
-      <h1 class="text-5xl md:text-7xl font-heading font-bold text-gold mb-6">
-        Where Every Move Counts
-      </h1>
-      <p class="text-lg md:text-2xl text-graySoft max-w-2xl mx-auto mb-10">
-        Unlock the Grandmaster Within You — Learn from Expert Coaches in Vadodara.
-      </p>
-
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="#contact" class="bg-gold text-black px-10 py-4 font-bold rounded-full hover:bg-white transition">Join Now</a>
-        <a href="tel:+917016435665"
-           class="border border-gold px-10 py-4 rounded-full hover:bg-gold hover:text-black transition">
-          Call: 7016435665
-        </a>
-      </div>
-    </div>
-  </header>
-
-  <!-- ========================= PROGRAMS ========================= -->
-  <section id="programs" class="py-24 bg-blackSoft">
-    <div class="container mx-auto px-6">
-      
-      <h2 class="text-4xl font-heading font-bold text-center text-gold mb-14">Elite Training Programs</h2>
-
-      <div class="grid md:grid-cols-3 gap-10">
-
-        <div class="p-8 bg-blackDeep border border-gold/30 rounded-xl hover:scale-105 transition">
-          <h3 class="text-2xl text-gold font-heading mb-4">Beginner to Advanced</h3>
-          <p class="text-graySoft">Step-by-step coaching to build strong foundations and strategic thinking.</p>
+                <div class="-mr-2 flex md:hidden">
+                    <button type="button" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="inline-flex items-center justify-center p-2 rounded-md text-gold-400 hover:text-white hover:bg-gray-800 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
         </div>
 
-        <div class="p-8 bg-blackDeep border border-gold/30 rounded-xl hover:scale-105 transition">
-          <h3 class="text-2xl text-gold font-heading mb-4">Advanced Tactical Training</h3>
-          <p class="text-graySoft">Puzzle-solving, tactics, openings, endgames & competitive preparation.</p>
+        <div class="hidden md:hidden bg-royal-black border-b border-gold-900" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 text-center">
+                <a href="#home" class="text-gold-100 block px-3 py-2 rounded-md text-base font-medium">Home</a>
+                <a href="#programs" class="text-gray-300 block px-3 py-2 rounded-md text-base font-medium">Programs</a>
+                <a href="#benefits" class="text-gray-300 block px-3 py-2 rounded-md text-base font-medium">Benefits</a>
+                <a href="#contact" class="text-gold-400 block px-3 py-2 rounded-md text-base font-bold">Contact Us</a>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1586165368502-1bad197a6461?q=80&w=2658&auto=format&fit=crop" 
+                 alt="Chess Board" 
+                 class="w-full h-full object-cover opacity-30">
+            <div class="absolute inset-0 bg-gradient-to-b from-royal-black/80 via-royal-black/40 to-royal-black"></div>
         </div>
 
-        <div class="p-8 bg-blackDeep border border-gold/30 rounded-xl hover:scale-105 transition">
-          <h3 class="text-2xl text-gold font-heading mb-4">Tournament Preparation</h3>
-          <p class="text-graySoft">Highly-refined personal and group coaching to become competition-ready.</p>
+        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto" data-aos="fade-up">
+            <h2 class="text-gold-300 font-body text-lg md:text-xl tracking-[0.5em] mb-4 uppercase">Bhatt Chess Academy</h2>
+            <h1 class="font-heading text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 leading-tight">
+                Where Every <br /> <span class="text-gold-gradient">Move Counts</span>
+            </h1>
+            <p class="text-gray-300 text-lg md:text-2xl font-light mb-10 max-w-2xl mx-auto">
+                Unlock the Grandmaster Within You. Expert coaching, strategic mastery, and a legacy of champions.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                <a href="#contact" class="px-8 py-4 bg-gradient-to-r from-gold-600 to-gold-400 text-black font-heading font-bold text-lg rounded-sm hover:scale-105 transition-transform shadow-[0_0_20px_rgba(212,175,55,0.4)]">
+                    Join Academy
+                </a>
+                <a href="tel:+917016435665" class="px-8 py-4 border border-gold-400 text-gold-400 font-heading font-bold text-lg rounded-sm hover:bg-gold-400/10 transition-colors">
+                    Call Now
+                </a>
+            </div>
         </div>
+    </section>
 
-      </div>
-    </div>
-  </section>
+    <section id="programs" class="py-24 bg-royal-dark relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-heading text-4xl md:text-5xl font-bold text-white mb-4">Elite <span class="text-gold-400">Training</span> Programs</h2>
+                <div class="h-1 w-24 bg-gold-400 mx-auto"></div>
+                <p class="mt-4 text-gray-400">Comprehensive courses designed for every skill level</p>
+            </div>
 
-  <!-- ========================= STATS ========================= -->
-  <section class="py-20 bg-blackDeep border-y border-gold/20">
-    <div class="container mx-auto px-6 grid md:grid-cols-3 gap-10 text-center">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="group bg-royal-card p-8 border border-white/5 hover:border-gold-400/50 transition-all duration-500 hover:-translate-y-2 rounded-sm relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-gold-400/10 rounded-bl-full -mr-4 -mt-4 transition-all group-hover:bg-gold-400/20"></div>
+                    <i class="fas fa-chess-pawn text-4xl text-gold-400 mb-6"></i>
+                    <h3 class="font-heading text-2xl text-white mb-3">Beginner to Advance</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Step-by-step learning from the fundamentals of movement to advanced opening theories.</p>
+                    <a href="#contact" class="text-gold-300 text-sm font-bold uppercase tracking-wider hover:text-white transition-colors">Learn More &rarr;</a>
+                </div>
 
-      <div>
-        <h3 class="text-5xl text-gold font-heading">500+</h3>
-        <p class="text-graySoft mt-2">Students Trained</p>
-      </div>
+                <div class="group bg-royal-card p-8 border border-white/5 hover:border-gold-400/50 transition-all duration-500 hover:-translate-y-2 rounded-sm relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-gold-400/10 rounded-bl-full -mr-4 -mt-4 transition-all group-hover:bg-gold-400/20"></div>
+                    <i class="fas fa-brain text-4xl text-gold-400 mb-6"></i>
+                    <h3 class="font-heading text-2xl text-white mb-3">Tactical Training</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Intensive puzzle solving, endgame practice, and game analysis to sharpen strategic thinking.</p>
+                    <a href="#contact" class="text-gold-300 text-sm font-bold uppercase tracking-wider hover:text-white transition-colors">Learn More &rarr;</a>
+                </div>
 
-      <div>
-        <h3 class="text-5xl text-gold font-heading">8+ Years</h3>
-        <p class="text-graySoft mt-2">Coaching Excellence</p>
-      </div>
+                <div class="group bg-royal-card p-8 border border-white/5 hover:border-gold-400/50 transition-all duration-500 hover:-translate-y-2 rounded-sm relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-gold-400/10 rounded-bl-full -mr-4 -mt-4 transition-all group-hover:bg-gold-400/20"></div>
+                    <i class="fas fa-trophy text-4xl text-gold-400 mb-6"></i>
+                    <h3 class="font-heading text-2xl text-white mb-3">Tournament Prep</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Regular in-house tournaments, clock practice, and psychological preparation for competitive play.</p>
+                    <a href="#contact" class="text-gold-300 text-sm font-bold uppercase tracking-wider hover:text-white transition-colors">Learn More &rarr;</a>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                 <p class="text-gold-100/80 italic font-heading text-lg">"Chess is not just a game - it's a way to train your mind for life."</p>
+            </div>
+        </div>
+    </section>
 
-      <div>
-        <h3 class="text-5xl text-gold font-heading">100+ Events</h3>
-        <p class="text-graySoft mt-2">Tournaments & Workshops</p>
-      </div>
+    <section id="benefits" class="py-24 bg-black relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                
+                <div>
+                    <h2 class="font-heading text-4xl font-bold text-white mb-6">Unlock Your <span class="text-gold-400">Potential</span></h2>
+                    <p class="text-gray-400 mb-8 text-lg">Join our academy to master the art of chess—a game that builds focus, logic, and unshakeable confidence.</p>
+                    
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 h-6 w-6 rounded-full border border-gold-400 flex items-center justify-center text-gold-400 mt-1">
+                                <i class="fas fa-check text-xs"></i>
+                            </span>
+                            <span class="ml-4 text-gray-300">Enhances concentration & logical thinking</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 h-6 w-6 rounded-full border border-gold-400 flex items-center justify-center text-gold-400 mt-1">
+                                <i class="fas fa-check text-xs"></i>
+                            </span>
+                            <span class="ml-4 text-gray-300">Improves decision-making skills under pressure</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 h-6 w-6 rounded-full border border-gold-400 flex items-center justify-center text-gold-400 mt-1">
+                                <i class="fas fa-check text-xs"></i>
+                            </span>
+                            <span class="ml-4 text-gray-300">Builds patience & confidence</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 h-6 w-6 rounded-full border border-gold-400 flex items-center justify-center text-gold-400 mt-1">
+                                <i class="fas fa-check text-xs"></i>
+                            </span>
+                            <span class="ml-4 text-gray-300">Encourages sportsmanship and discipline</span>
+                        </li>
+                    </ul>
+                </div>
 
-    </div>
-  </section>
+                <div class="relative">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-gold-600 to-gold-300 rounded-lg blur opacity-25"></div>
+                    <div class="relative bg-royal-card p-8 md:p-12 rounded-lg border border-white/10">
+                        <h3 class="font-heading text-2xl text-gold-100 mb-6 text-center border-b border-white/10 pb-4">Special Features</h3>
+                        <div class="space-y-6">
+                            <div class="flex items-center">
+                                <i class="fas fa-certificate text-gold-500 text-xl w-8"></i>
+                                <span class="text-gray-300">Certificates for Achievers</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-chart-line text-gold-500 text-xl w-8"></i>
+                                <span class="text-gray-300">Weekly Performance Tracking</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-couch text-gold-500 text-xl w-8"></i>
+                                <span class="text-gray-300">Comfortable, Quiet Environment</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-user-graduate text-gold-500 text-xl w-8"></i>
+                                <span class="text-gray-300">Expert Coaching for All Ages</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-  <!-- ========================= BENEFITS ========================= -->
-  <section id="benefits" class="py-24 bg-blackSoft">
-    <div class="container mx-auto px-6">
-      
-      <h2 class="text-4xl font-heading font-bold text-center text-gold mb-14">Why Choose Chess?</h2>
+            </div>
+        </div>
+    </section>
 
-      <div class="grid md:grid-cols-2 gap-12">
+    <section id="gallery" class="py-24 bg-royal-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="font-heading text-4xl font-bold text-white">Academy <span class="text-gold-400">Gallery</span></h2>
+                <div class="h-1 w-16 bg-gold-400 mx-auto mt-4"></div>
+            </div>
 
-        <!-- Benefits -->
-        <ul class="space-y-5 text-lg">
-          <li class="flex items-center gap-3"><span class="text-gold text-xl">✔</span> Enhances concentration & logical thinking</li>
-          <li class="flex items-center gap-3"><span class="text-gold text-xl">✔</span> Builds patience & confidence</li>
-          <li class="flex items-center gap-3"><span class="text-gold text-xl">✔</span> Improves decision-making skills</li>
-          <li class="flex items-center gap-3"><span class="text-gold text-xl">✔</span> Encourages sportsmanship</li>
-        </ul>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="aspect-w-4 aspect-h-3 overflow-hidden rounded-lg shadow-lg border border-white/10 group">
+                    <img src="https://images.unsplash.com/photo-1529699211952-734e80c4d42b?q=80&w=2671&auto=format&fit=crop" alt="Chess Tournament" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100">
+                </div>
+                <div class="aspect-w-4 aspect-h-3 overflow-hidden rounded-lg shadow-lg border border-white/10 group">
+                    <img src="https://images.unsplash.com/photo-1580541832626-2a7131ee809f?q=80&w=2609&auto=format&fit=crop" alt="Coaching Session" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100">
+                </div>
+                <div class="aspect-w-4 aspect-h-3 overflow-hidden rounded-lg shadow-lg border border-white/10 group">
+                    <img src="https://images.unsplash.com/photo-1523875194681-bedd468c58bf?q=80&w=2671&auto=format&fit=crop" alt="Chess Pieces" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100">
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <!-- Features -->
-        <ul class="space-y-5 text-lg">
-          <li class="flex items-center gap-3"><span class="text-gold text-xl">★</span> Certificates for achievers</li>
-          <li class="flex items-center gap-3"><span class="text-gold text-xl">★</span> Weekly performance tracking</li>
-          <li class="flex items-center gap-3"><span class="text-gold text-xl">★</span> Comfortable, quiet learning environment</li>
-        </ul>
+    <section id="contact" class="bg-black border-t border-gold-900/50 pt-20 pb-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                
+                <div>
+                    <h2 class="font-heading text-3xl font-bold text-white mb-6">Visit <span class="text-gold-gradient">Bhatt Chess Academy</span></h2>
+                    <div class="space-y-6 text-gray-400 font-light">
+                        <div class="flex items-start">
+                            <i class="fas fa-map-marker-alt text-gold-400 mt-1 mr-4"></i>
+                            <p>GF 29 & 30, Samanvay Westbreeze,<br>
+                            Opp. Anand Hospital, Opp. Sepal Residency,<br>
+                            New Alkapuri, Gotri, Vadodara</p>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-phone-alt text-gold-400 mr-4"></i>
+                            <a href="tel:7016435665" class="hover:text-white transition-colors">7016435665</a>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fab fa-whatsapp text-gold-400 mr-4"></i>
+                            <a href="https://wa.me/917016435665" class="hover:text-white transition-colors">Chat on WhatsApp</a>
+                        </div>
+                    </div>
+                </div>
 
-      </div>
-    </div>
-  </section>
+                <div class="bg-royal-card p-8 rounded-lg border border-gold-400/20 text-center">
+                    <h3 class="font-heading text-2xl text-white mb-2">Admissions Open Now!</h3>
+                    <p class="text-gray-400 mb-6 text-sm">Royal Minds Play Here. Start your journey today.</p>
+                    <a href="tel:7016435665" class="inline-block w-full py-3 bg-gold-500 text-black font-bold uppercase tracking-widest rounded-sm hover:bg-gold-400 transition-colors shadow-lg">
+                        Call to Register
+                    </a>
+                </div>
+            </div>
 
-  <!-- ========================= GALLERY ========================= -->
-  <section id="gallery" class="py-24 bg-blackDeep">
-    <div class="container mx-auto px-6">
-      <h2 class="text-4xl font-heading font-bold text-center text-gold mb-14">Academy Moments</h2>
-
-      <!-- Replace Images As Needed -->
-      <div class="grid md:grid-cols-3 gap-6">
-        <img src="https://images.unsplash.com/photo-1586165368502-1bad197a6461?auto=format&fit=crop&w=800&q=80"
-             class="rounded-lg shadow-lg object-cover h-72 w-full">
-        <img src="https://images.unsplash.com/photo-1504274066651-8d31a536b11a?auto=format&fit=crop&w=800&q=80"
-             class="rounded-lg shadow-lg object-cover h-72 w-full">
-        <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80"
-             class="rounded-lg shadow-lg object-cover h-72 w-full">
-      </div>
-    </div>
-  </section>
-
-  <!-- ========================= CONTACT ========================= -->
-  <footer id="contact" class="py-24 bg-blackSoft">
-    <div class="container mx-auto px-6 text-center">
-
-      <h2 class="text-4xl font-heading text-gold mb-6">Join Bhatt Chess Academy</h2>
-
-      <p class="text-graySoft mb-8">GF 29 & 30, Samanvay Westbreeze, New Alkapuri, Gotri, Vadodara</p>
-
-      <a href="tel:+917016435665"
-         class="bg-gold text-black px-12 py-4 rounded-full font-bold hover:bg-white transition inline-block mb-8">
-        📞 7016435665
-      </a>
-
-      <p class="text-graySoft text-sm mt-10">© 2024 Bhatt Chess Academy — All Rights Reserved</p>
-    </div>
-  </footer>
+            <div class="border-t border-white/5 mt-16 pt-8 text-center text-gray-600 text-sm">
+                <p>&copy; 2024 Bhatt Chess Academy. All Rights Reserved.</p>
+            </div>
+        </div>
+    </section>
 
 </body>
 </html>
