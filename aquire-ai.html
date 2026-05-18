@@ -3,459 +3,288 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AcquireAI — Autonomous AI Client Acquisition Platform</title>
+    <title>AcquireAI — Autonomous AI Client Acquisition</title>
     
-    <!-- Premium Fonts: Space Grotesk for Headings, Inter for Body -->
+    <!-- Premium Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     
+    <!-- GSAP & Lenis CDNs -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1/bundled/lenis.min.js"></script>
+
     <style>
         :root {
-            --bg-deep: #05050a;
-            --bg-surface: rgba(15, 23, 42, 0.6);
+            --bg-deep: #030508;
+            --bg-surface: rgba(15, 23, 42, 0.4);
             --indigo: #6366f1;
-            --indigo-glow: rgba(99, 102, 241, 0.3);
+            --indigo-glow: rgba(99, 102, 241, 0.25);
             --teal: #2dd4bf;
             --teal-glow: rgba(45, 212, 191, 0.2);
             --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border: rgba(255, 255, 255, 0.08);
+            --text-muted: #8b9bb4;
+            --border: rgba(255, 255, 255, 0.05);
             --font-head: 'Space Grotesk', sans-serif;
             --font-body: 'Inter', sans-serif;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* Base & Smooth Scroll Resets */
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; /* Hide default cursor */ }
+        html.lenis { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto; }
         
         body {
-            font-family: var(--font-body);
-            background-color: var(--bg-deep);
-            color: var(--text-main);
-            line-height: 1.6;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
+            font-family: var(--font-body); background-color: var(--bg-deep);
+            color: var(--text-main); overflow-x: hidden; -webkit-font-smoothing: antialiased;
         }
 
-        /* 1. Animated Background Grid & Orbs */
+        /* 1. Custom Premium Cursor */
+        .cursor-dot, .cursor-outline {
+            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%);
+            border-radius: 50%; z-index: 9999; pointer-events: none;
+        }
+        .cursor-dot { width: 6px; height: 6px; background-color: var(--teal); }
+        .cursor-outline {
+            width: 40px; height: 40px; border: 1px solid rgba(45, 212, 191, 0.5);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+        .cursor-hover .cursor-outline {
+            width: 60px; height: 60px; background-color: rgba(45, 212, 191, 0.1); border-color: transparent;
+        }
+
+        /* 2. Noise Texture & Cyber Background */
+        .noise-overlay {
+            position: fixed; inset: 0; z-index: 9998; pointer-events: none; opacity: 0.04;
+            background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+        }
         .ambient-bg {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            background: 
-                radial-gradient(circle at 15% 50%, var(--indigo-glow), transparent 40%),
-                radial-gradient(circle at 85% 30%, var(--teal-glow), transparent 40%);
-            filter: blur(80px);
-            animation: pulseBg 10s ease-in-out infinite alternate;
-        }
-        .grid-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            background-image: 
-                linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-            -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+            position: fixed; inset: 0; z-index: -1;
+            background: radial-gradient(circle at 50% 0%, rgba(99,102,241,0.15), transparent 60%);
+            filter: blur(60px);
         }
 
-        @keyframes pulseBg {
-            0% { opacity: 0.5; transform: scale(1); }
-            100% { opacity: 0.8; transform: scale(1.1); }
-        }
-
-        /* Layout */
-        .container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; }
-        section { padding: 8rem 0; position: relative; }
-
-        /* Typography */
-        h1, h2, h3 { font-family: var(--font-head); line-height: 1.1; margin-bottom: 1.5rem; }
-        h1 { font-size: clamp(3rem, 6vw, 5rem); letter-spacing: -0.04em; }
-        .text-gradient {
-            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        /* Typography & Layout */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        section { padding: 10rem 0; position: relative; }
+        h1, h2, h3 { font-family: var(--font-head); line-height: 1.1; margin-bottom: 1.5rem; letter-spacing: -0.03em; }
+        h1 { font-size: clamp(3.5rem, 6vw, 5.5rem); }
+        .text-gradient { background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         p { color: var(--text-muted); font-size: 1.125rem; margin-bottom: 1.5rem; }
 
-        /* Glassmorphism & Mouse Reactive Cards */
-        .glass-panel {
-            background: var(--bg-surface);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        /* The Spotlight Effect */
-        .spotlight-card {
-            position: relative;
-        }
-        .spotlight-card::before {
-            content: "";
-            position: absolute;
-            top: var(--y, 0); left: var(--x, 0);
-            transform: translate(-50%, -50%);
-            width: 400px; height: 400px;
-            background: radial-gradient(circle, rgba(99,102,241,0.15), transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-            z-index: 0;
-        }
-        .spotlight-card:hover::before { opacity: 1; }
-        .spotlight-card > * { position: relative; z-index: 1; }
-
         /* Buttons */
-        .btn {
+        .btn-glow {
             display: inline-flex; align-items: center; justify-content: center;
-            padding: 1rem 2rem; border-radius: 12px; font-weight: 500;
-            transition: all 0.3s ease; cursor: pointer; text-decoration: none;
-            font-family: var(--font-head); letter-spacing: 0.5px;
+            padding: 1.25rem 2.5rem; border-radius: 8px; font-weight: 600;
+            font-family: var(--font-head); color: white; text-decoration: none;
+            background: var(--indigo); border: 1px solid #818cf8;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-glow:hover { box-shadow: 0 0 40px rgba(99, 102, 241, 0.7); transform: scale(1.02); }
+
+        /* GSAP Cinematic Reveal Classes */
+        .gsap-reveal { opacity: 0; transform: translateY(80px) scale(0.96); filter: blur(10px); }
+
+        /* Hero Parallax Layout */
+        .hero-split { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; min-height: 90vh; }
+        
+        /* 3. The Orchestration Simulation UI */
+        .orchestration-panel {
+            background: rgba(10, 15, 25, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border); border-radius: 16px; padding: 2rem;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
             position: relative; overflow: hidden;
         }
-        .btn-glow {
-            background: var(--indigo); color: white; border: 1px solid #818cf8;
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
-        }
-        .btn-glow:hover {
-            box-shadow: 0 0 40px rgba(99, 102, 241, 0.6);
-            transform: translateY(-2px);
-        }
-
-        /* Hero Split Layout */
-        .hero-split {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
-            padding-top: 6rem;
-        }
-
-        /* 3. LIVE AI DASHBOARD SIMULATION */
-        .live-dashboard {
-            height: 500px; display: flex; flex-direction: column;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-        }
-        .dash-header {
-            padding: 1rem; border-bottom: 1px solid var(--border);
-            display: flex; justify-content: space-between; align-items: center;
-            background: rgba(0,0,0,0.2);
-        }
-        .status-dot {
-            width: 8px; height: 8px; background: var(--teal); border-radius: 50%;
-            box-shadow: 0 0 10px var(--teal);
-            animation: blink 2s infinite;
-        }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        .orch-header { display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem; font-family: monospace; font-size: 0.8rem; color: var(--text-muted); }
+        .pulse-dot { width: 8px; height: 8px; background: var(--teal); border-radius: 50%; box-shadow: 0 0 10px var(--teal); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
         
-        .dash-body {
-            flex: 1; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;
-            position: relative;
+        .timeline-stream { display: flex; flex-direction: column; gap: 1rem; height: 350px; overflow-y: hidden; position: relative; }
+        .timeline-item {
+            font-size: 0.9rem; padding: 1rem; background: rgba(255,255,255,0.02);
+            border-left: 2px solid var(--border); border-radius: 0 8px 8px 0;
+            opacity: 0; transform: translateX(-20px); transition: all 0.4s ease;
         }
-        
-        /* Floating Lead Feed */
-        .feed-container { flex: 1; overflow: hidden; position: relative; }
-        .feed-item {
-            background: rgba(255,255,255,0.03); border: 1px solid var(--border);
-            padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 0.75rem;
-            font-size: 0.875rem; display: flex; justify-content: space-between;
-            animation: slideIn 0.4s ease-out forwards;
-            opacity: 0; transform: translateY(10px);
-        }
-        @keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
-        
-        /* Typing Terminal */
-        .ai-terminal {
-            background: #020617; border-radius: 8px; padding: 1rem;
-            font-family: monospace; color: var(--teal); font-size: 0.875rem;
-            min-height: 100px; border: 1px solid var(--border);
-        }
-        .cursor { display: inline-block; width: 6px; height: 15px; background: var(--teal); animation: blink 1s infinite; vertical-align: middle;}
+        .timeline-item.active { opacity: 1; transform: translateX(0); border-left-color: var(--teal); background: rgba(45, 212, 191, 0.05); }
+        .timeline-item.done { opacity: 0.6; border-left-color: var(--indigo); transform: translateX(0); }
+        .typing-text::after { content: '|'; animation: blink 1s infinite; color: var(--teal); }
 
-        /* Metrics / Numbers */
-        .metrics-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;
-            margin-top: 4rem; border-top: 1px solid var(--border); padding-top: 3rem;
-        }
-        .metric { text-align: center; }
-        .metric-num { font-size: 3rem; font-family: var(--font-head); font-weight: 700; color: var(--text-main); }
-        .metric-label { color: var(--indigo); font-weight: 500; text-transform: uppercase; letter-spacing: 1px; font-size: 0.875rem; }
-
-        /* Animated Pipeline Workflow */
-        .pipeline-track {
-            display: flex; justify-content: space-between; align-items: center;
-            position: relative; margin: 4rem 0; padding: 2rem 0;
-        }
-        .pipeline-track::before {
-            content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 2px;
-            background: var(--border); z-index: 0; transform: translateY(-50%);
-        }
-        .pipeline-node {
-            background: var(--bg-deep); border: 2px solid var(--border);
-            padding: 1rem 2rem; border-radius: 30px; position: relative; z-index: 1;
-            font-family: var(--font-head); font-weight: 600; color: var(--text-muted);
-            transition: all 0.5s;
-        }
-        .pipeline-node.active {
-            border-color: var(--indigo); color: white;
-            box-shadow: 0 0 20px var(--indigo-glow);
-        }
-
-        /* Features Grid */
-        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
-        .feature-card { padding: 2.5rem; }
-
-        /* Scroll Reveal Utility Classes */
-        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
-        .reveal.visible { opacity: 1; transform: translateY(0); }
-        .delay-1 { transition-delay: 0.1s; }
-        .delay-2 { transition-delay: 0.2s; }
+        /* Dynamic Metrics */
+        .metrics-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; padding-top: 4rem; border-top: 1px solid var(--border); margin-top: 4rem; }
+        .metric-val { font-size: 2.5rem; font-family: var(--font-head); font-weight: 700; color: var(--text-main); }
+        .metric-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--indigo); margin-top: 0.5rem; }
 
         /* Nav */
-        nav { padding: 1.5rem 0; border-bottom: 1px solid var(--border); position: relative; z-index: 10; }
-        .nav-inner { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-family: var(--font-head); font-size: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;}
-        .logo span { color: var(--indigo); }
-
-        @media (max-width: 968px) {
-            .hero-split { grid-template-columns: 1fr; gap: 3rem; }
-            .metrics-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-            .pipeline-track { flex-direction: column; gap: 2rem; }
-            .pipeline-track::before { width: 2px; height: 100%; top: 0; left: 50%; transform: translateX(-50%); }
-        }
+        nav { position: fixed; top: 0; width: 100%; padding: 1.5rem 2rem; z-index: 100; mix-blend-mode: difference; }
+        .logo { font-family: var(--font-head); font-size: 1.5rem; font-weight: 700; color: #fff;}
     </style>
 </head>
 <body>
 
-    <!-- Ambient Background -->
+    <!-- OS UI Overlays -->
+    <div class="noise-overlay"></div>
     <div class="ambient-bg"></div>
-    <div class="grid-overlay"></div>
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
 
     <nav>
-        <div class="container nav-inner">
-            <div class="logo">Acquire<span>AI</span></div>
-            <a href="#" class="btn btn-glow" style="padding: 0.5rem 1.5rem; font-size: 0.875rem;">Launch Dashboard</a>
-        </div>
+        <div class="logo">AcquireAI // OS</div>
     </nav>
 
     <main>
-        <!-- HERO SECTION -->
-        <section class="container hero-split">
-            <div class="hero-content reveal">
-                <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(99,102,241,0.1); border: 1px solid var(--indigo-glow); padding: 0.5rem 1rem; border-radius: 20px; margin-bottom: 2rem; font-size: 0.875rem; color: var(--text-main);">
-                    <div class="status-dot"></div> Live Autonomous Acquisition
+        <!-- Hero Section -->
+        <section class="container hero-split" id="hero">
+            <div class="hero-content gsap-reveal interactive-hover" data-speed="0.05">
+                <div style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--teal); font-family: monospace; font-size: 0.85rem; margin-bottom: 1.5rem;">
+                    <div class="pulse-dot"></div> System Active & Scanning
                 </div>
-                <h1 class="text-gradient">Stop Chasing Clients.<br>Let AI Acquire Them.</h1>
-                <p>An autonomous AI engine that discovers leads, scores intent, writes hyper-personalized outreach, and manages follow-ups at machine speed.</p>
-                
-                <div style="margin-top: 2.5rem; display: flex; gap: 1rem; align-items: center;">
-                    <a href="#" class="btn btn-glow">Deploy Your AI Agent</a>
-                    <span style="color: var(--text-muted); font-size: 0.875rem;">Takes 2 minutes to setup</span>
+                <h1 class="text-gradient">Automate Your Acquisition Engine.</h1>
+                <p>AcquireAI is a military-grade business development network. It autonomously discovers leads, scores intent, and executes personalized outreach while you sleep.</p>
+                <div style="margin-top: 3rem;">
+                    <a href="#" class="btn-glow interactive-hover">Deploy My AI Engine</a>
                 </div>
             </div>
 
-            <!-- THE LIVE AI SYSTEM SIMULATION -->
-            <div class="glass-panel live-dashboard reveal delay-2 spotlight-card">
-                <div class="dash-header">
-                    <div style="display: flex; gap: 0.5rem;">
-                        <div style="width:12px;height:12px;border-radius:50%;background:#ef4444;"></div>
-                        <div style="width:12px;height:12px;border-radius:50%;background:#eab308;"></div>
-                        <div style="width:12px;height:12px;border-radius:50%;background:#22c55e;"></div>
-                    </div>
-                    <div style="font-family: monospace; font-size: 0.75rem; color: var(--text-muted);">AcquireAI // Engine v3.1</div>
+            <!-- The Real Orchestration Simulation -->
+            <div class="orchestration-panel gsap-reveal interactive-hover" data-speed="-0.03">
+                <div class="orch-header">
+                    <span>LIVE_PIPELINE_ORCHESTRATION</span>
+                    <span>AGENT_STATUS: ACTIVE</span>
                 </div>
-                <div class="dash-body">
-                    <div style="display: flex; justify-content: space-between; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">
-                        <span>Live Lead Stream</span>
-                        <span style="color: var(--teal);">Monitoring 8 Platforms</span>
-                    </div>
-                    
-                    <div class="feed-container" id="lead-feed">
-                        <!-- Leads injected via JS -->
-                    </div>
-
-                    <div class="ai-terminal">
-                        <span style="color: var(--text-muted)">> Generating outreach...</span><br>
-                        <span id="typewriter"></span><span class="cursor"></span>
-                    </div>
+                <div class="timeline-stream" id="orch-stream">
+                    <!-- Javascript injects timeline items here -->
                 </div>
             </div>
         </section>
 
-        <!-- REVENUE / PERFORMANCE METRICS -->
-        <section class="container reveal">
-            <div class="metrics-grid glass-panel spotlight-card" style="padding: 3rem;">
-                <div class="metric">
-                    <div class="metric-num text-gradient">24/7</div>
-                    <div class="metric-label">Autonomous Operation</div>
+        <!-- Live Streaming Metrics -->
+        <section class="container gsap-reveal">
+            <div class="metrics-bar">
+                <div>
+                    <div class="metric-val">$<span id="metric-rev">48,392</span></div>
+                    <div class="metric-label">Pipeline Generated Today</div>
                 </div>
-                <div class="metric">
-                    <div class="metric-num text-gradient" id="counter1">0</div>
-                    <div class="metric-label">Increase in pipeline</div>
+                <div>
+                    <div class="metric-val" id="metric-agents">127</div>
+                    <div class="metric-label">AI Agents Deployed</div>
                 </div>
-                <div class="metric">
-                    <div class="metric-num text-gradient">18.6x</div>
-                    <div class="metric-label">Faster than manual</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ANIMATED WORKFLOW PIPELINE -->
-        <section class="container reveal">
-            <h2 style="text-align: center;">The Acquisition Operating System</h2>
-            <p style="text-align: center; max-width: 600px; margin: 0 auto;">Watch how data flows continuously from raw platform noise to closed revenue.</p>
-            
-            <div class="pipeline-track" id="pipeline">
-                <div class="pipeline-node active">Discover</div>
-                <div class="pipeline-node">Score Intent</div>
-                <div class="pipeline-node">Generate Outreach</div>
-                <div class="pipeline-node">Auto Follow-up</div>
-                <div class="pipeline-node" style="color: var(--teal); border-color: var(--teal);">Close</div>
-            </div>
-        </section>
-
-        <!-- FEATURES GRID (CYBER AESTHETIC) -->
-        <section class="container reveal">
-            <div class="feature-grid">
-                <div class="glass-panel feature-card spotlight-card">
-                    <h3 style="color: var(--indigo);">Multi-Platform Scanning</h3>
-                    <p>Simultaneously monitors LinkedIn, Upwork, Reddit, GitHub, and HackerNews for keywords and buying signals.</p>
-                </div>
-                <div class="glass-panel feature-card spotlight-card">
-                    <h3 style="color: var(--teal);">Context-Aware Personalization</h3>
-                    <p>Scrapes prospect profiles and project descriptions to write hyper-specific, non-robotic outreach messages.</p>
-                </div>
-                <div class="glass-panel feature-card spotlight-card">
-                    <h3 style="color: #f43f5e;">Human-in-the-Loop Control</h3>
-                    <p>Pause automation instantly. Review drafts in "Approval Mode" before the AI hits send on high-value targets.</p>
+                <div>
+                    <div class="metric-val"><span id="metric-leads">3,842</span></div>
+                    <div class="metric-label">Leads Processed</div>
                 </div>
             </div>
         </section>
-
-        <!-- URGENCY FOMO SECTION -->
-        <section class="container reveal">
-            <div class="glass-panel spotlight-card" style="padding: 4rem; text-align: center; background: linear-gradient(180deg, rgba(15,23,42,0) 0%, rgba(99,102,241,0.1) 100%);">
-                <h2>While you read this, competitors captured <span style="color: var(--teal);" id="fomo-counter">142</span> leads.</h2>
-                <p style="max-width: 600px; margin: 0 auto 2.5rem;">Opportunities are won by who replies first and sounds most relevant. Compete at machine speed.</p>
-                <a href="#" class="btn btn-glow" style="transform: scale(1.1);">Initialize AcquireAI Now</a>
-            </div>
+        
+        <!-- Add more GSAP-reveal sections here as needed (Features, Urgency, etc) -->
+        <section class="container gsap-reveal" style="text-align: center; margin-top: 10rem; padding-bottom: 10rem;">
+            <h2>Stop hunting. Start closing.</h2>
+            <p>Your pipeline is waiting to be automated.</p>
+            <a href="#" class="btn-glow interactive-hover">Initialize Autonomous Outreach</a>
         </section>
     </main>
 
-    <footer style="border-top: 1px solid var(--border); padding: 3rem 0; margin-top: 5rem; text-align: center; color: var(--text-muted);">
-        <div class="container">
-            <p>&copy; 2026 AcquireAI OS. All systems operational.</p>
-        </div>
-    </footer>
-
-    <!-- INTERACTIVE JAVASCRIPT -->
     <script>
-        // 1. Scroll Reveal Logic (Intersection Observer)
-        const revealElements = document.querySelectorAll('.reveal');
-        const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    revealObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
-        revealElements.forEach(el => revealObserver.observe(el));
+        // 1. Initialize Lenis Smooth Scroll
+        const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), direction: 'vertical', gestureDirection: 'vertical', smooth: true });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
 
-        // 2. Spotlight Mouse Hover Effect for Glass Cards
-        document.querySelectorAll('.spotlight-card').forEach(card => {
-            card.addEventListener('mousemove', e => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                card.style.setProperty('--x', `${x}px`);
-                card.style.setProperty('--y', `${y}px`);
+        // 2. Custom Premium Cursor Logic
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX; const posY = e.clientY;
+            cursorDot.style.left = `${posX}px`; cursorDot.style.top = `${posY}px`;
+            // Add slight delay to outline for a premium trailing effect
+            cursorOutline.animate({ left: `${posX}px`, top: `${posY}px` }, { duration: 500, fill: "forwards" });
+        });
+        document.querySelectorAll('a, .interactive-hover').forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+        });
+
+        // 3. GSAP Cinematic Scroll Reveals
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.utils.toArray('.gsap-reveal').forEach(elem => {
+            gsap.to(elem, {
+                scrollTrigger: { trigger: elem, start: "top 85%", toggleActions: "play none none reverse" },
+                y: 0, scale: 1, filter: 'blur(0px)', opacity: 1, duration: 1.2, ease: "power3.out"
             });
         });
 
-        // 3. Live Dashboard Simulator (Feed + Typing)
-        const feedContainer = document.getElementById('lead-feed');
-        const fakeLeads = [
-            { src: 'LinkedIn', txt: 'CTO seeking React devs', val: '$12k' },
-            { src: 'Upwork', txt: 'AI integration needed', val: '$5k' },
-            { src: 'Reddit', txt: 'Looking for SaaS designer', val: '$8k' },
-            { src: 'GitHub', txt: 'Issue #42: Need contract help', val: 'Hot' },
+        // 4. Mouse Parallax Depth Effect
+        document.addEventListener("mousemove", (e) => {
+            document.querySelectorAll("[data-speed]").forEach(layer => {
+                const speed = layer.getAttribute("data-speed");
+                const x = (window.innerWidth - e.pageX * speed) / 100;
+                const y = (window.innerHeight - e.pageY * speed) / 100;
+                gsap.to(layer, { x: x, y: y, duration: 1, ease: "power1.out" });
+            });
+        });
+
+        // 5. The Real Orchestration Simulation
+        const stream = document.getElementById('orch-stream');
+        const sequences = [
+            { txt: "Scanning target platforms...", time: 1000 },
+            { txt: "<span style='color:var(--teal)'>Target Detected</span>: CTO @ TechFlow Inc. (LinkedIn)", time: 1500 },
+            { txt: "Analyzing recent posts & buying intent...", time: 1200 },
+            { txt: "Intent Score: <strong style='color:var(--teal)'>94% High</strong>", time: 800 },
+            { txt: "Generating contextual outreach draft...", time: 1500 },
+            { txt: "> Hey Markus, saw your recent push to scale AI workflows. Mind if I share an architecture map?", typing: true, time: 3000 },
+            { txt: "Message Dispatched. Awaiting reply.", time: 2000 }
         ];
 
-        function addLead() {
-            const lead = fakeLeads[Math.floor(Math.random() * fakeLeads.length)];
-            const div = document.createElement('div');
-            div.className = 'feed-item';
-            div.innerHTML = `
-                <div><span style="color:var(--indigo)">[${lead.src}]</span> ${lead.txt}</div>
-                <div style="color:var(--teal)">${lead.val}</div>
-            `;
-            feedContainer.prepend(div);
-            if (feedContainer.children.length > 4) {
-                feedContainer.removeChild(feedContainer.lastChild);
-            }
-        }
-        setInterval(addLead, 2500);
-        addLead(); // Init first lead
+        async function runSimulation() {
+            stream.innerHTML = ''; // Reset
+            for (let i = 0; i < sequences.length; i++) {
+                const step = sequences[i];
+                const div = document.createElement('div');
+                div.className = 'timeline-item active';
+                stream.appendChild(div);
 
-        // Typing effect
-        const textToType = "Hey David, saw your post about needing an AI workflow integration. We specialize in exactly this stack. Mind if I send over a quick architectural proposal?";
-        const typeTarget = document.getElementById('typewriter');
-        let typeIndex = 0;
-
-        function typeWriter() {
-            if (typeIndex < textToType.length) {
-                typeTarget.innerHTML += textToType.charAt(typeIndex);
-                typeIndex++;
-                setTimeout(typeWriter, Math.random() * 50 + 20);
-            } else {
-                setTimeout(() => {
-                    typeTarget.innerHTML = '';
-                    typeIndex = 0;
-                    typeWriter();
-                }, 4000); // Wait 4s before restarting
-            }
-        }
-        setTimeout(typeWriter, 1000);
-
-        // 4. Pipeline Node Animation Cycle
-        const nodes = document.querySelectorAll('.pipeline-node');
-        let activeNode = 0;
-        setInterval(() => {
-            nodes.forEach(n => n.classList.remove('active'));
-            activeNode = (activeNode + 1) % nodes.length;
-            nodes[activeNode].classList.add('active');
-        }, 2000);
-
-        // 5. Animated Counter (Stats)
-        let counterRan = false;
-        const statObserver = new IntersectionObserver((entries) => {
-            if(entries[0].isIntersecting && !counterRan) {
-                counterRan = true;
-                const counter = document.getElementById('counter1');
-                let count = 0;
-                const target = 412;
-                const interval = setInterval(() => {
-                    count += 8;
-                    if(count >= target) {
-                        counter.innerText = `+${target}%`;
-                        clearInterval(interval);
-                    } else {
-                        counter.innerText = `+${count}%`;
+                if (step.typing) {
+                    div.classList.add('typing-text');
+                    let typedTxt = "";
+                    const charArray = step.txt.split('');
+                    for(let c of charArray) {
+                        typedTxt += c;
+                        div.innerHTML = typedTxt;
+                        await new Promise(r => setTimeout(r, 30)); // typing speed
                     }
-                }, 20);
-            }
-        });
-        statObserver.observe(document.getElementById('counter1'));
+                    div.classList.remove('typing-text');
+                } else {
+                    div.innerHTML = step.txt;
+                }
 
-        // 6. Urgency FOMO Counter Increment
-        const fomoCounter = document.getElementById('fomo-counter');
-        let fomoVal = 142;
+                await new Promise(r => setTimeout(r, step.time));
+                div.classList.replace('active', 'done');
+                
+                // Auto scroll stream down
+                if(stream.children.length > 4) {
+                    gsap.to(stream, { scrollTop: stream.scrollHeight, duration: 0.5 });
+                }
+            }
+            // Loop sequence
+            setTimeout(runSimulation, 3000);
+        }
+        setTimeout(runSimulation, 1000); // Start simulation
+
+        // 6. Live Streaming Numbers (Metrics)
         setInterval(() => {
-            fomoVal += Math.floor(Math.random() * 3);
-            fomoCounter.innerText = fomoVal;
+            const revEl = document.getElementById('metric-rev');
+            let rev = parseInt(revEl.innerText.replace(',', ''));
+            rev += Math.floor(Math.random() * 100);
+            revEl.innerText = rev.toLocaleString();
         }, 3500);
 
+        setInterval(() => {
+            const leadsEl = document.getElementById('metric-leads');
+            let leads = parseInt(leadsEl.innerText.replace(',', ''));
+            leads += Math.floor(Math.random() * 3);
+            leadsEl.innerText = leads.toLocaleString();
+        }, 2000);
     </script>
 </body>
 </html>
