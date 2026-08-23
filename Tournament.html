@@ -129,7 +129,7 @@
                     <div>
                         <div class="flex justify-between items-start mb-6">
                             <span class="text-3xl">👦</span>
-                            <span class="bg-gold/10 text-gold text-xs font-bold font-body px-3 py-1 rounded-full border border-gold/30">Junior Divisions</span>
+                            <span class="bg-gold/10 text-gold text-xl font-bold font-body px-3 py-1 rounded-full border border-gold/30">Junior Divisions</span>
                         </div>
                         <h2 class="font-heading text-2xl font-bold text-gold mb-2">Categories: U8, U11 & U15</h2>
                         <div class="w-16 h-0.5 bg-gold mb-6"></div>
@@ -142,7 +142,7 @@
                             </div>
                             <div class="flex items-center space-x-3">
                                 <span class="text-gold font-bold w-5">🎟️</span>
-                                <p class="text-gray-300"><strong class="text-white">Entry Fee:</strong> ₹399/- per player</p>
+                                <p class="text-gray-300"><strong class="text-white">Entry Fee:</strong> ₹500/- per player</p>
                             </div>
                             <div class="flex items-start space-x-3">
                                 <span class="text-gold font-bold w-5 mt-0.5">🏆</span>
@@ -170,7 +170,7 @@
                     <div>
                         <div class="flex justify-between items-start mb-6">
                             <span class="text-3xl">👑</span>
-                            <span class="bg-gold text-black text-xs font-bold font-body px-3 py-1 rounded-full uppercase tracking-wider shadow-md">Total Pool: ₹11,000</span>
+                            <span class="bg-gold text-black text-xl font-bold font-body px-3 py-1 rounded-full uppercase tracking-wider shadow-md">Total Pool: ₹11,000</span>
                         </div>
                         <h2 class="font-heading text-2xl font-bold text-gold mb-2">Open Category</h2>
                         <div class="w-16 h-0.5 bg-gold mb-6"></div>
@@ -183,7 +183,7 @@
                             </div>
                             <div class="flex items-center space-x-3">
                                 <span class="text-gold font-bold w-5">🎟️</span>
-                                <p class="text-gray-300"><strong class="text-white">Entry Fee:</strong> ₹399/- per player</p>
+                                <p class="text-gray-300"><strong class="text-white">Entry Fee:</strong> ₹500/- per player</p>
                             </div>
                         </div>
 
@@ -224,7 +224,7 @@
             <!-- BOX FOR COMMON PERKS & OFFERS -->
             <div class="bg-gradient-to-r from-gold/10 via-gold/20 to-gold/10 border border-gold/40 rounded-xl p-6 mb-12 text-center font-body">
                 <h3 class="text-gold font-heading text-lg font-bold mb-2">💡 Double Category Combo Offer</h3>
-                <p class="text-white text-xl font-bold mb-2">Play in Both Under & Open Categories for just <span class="text-gold gold-glow">₹799/-</span></p>
+                <p class="text-white text-xl font-bold mb-2">Play in Both Under & Open Categories for just <span class="text-gold gold-glow">₹900/-</span></p>
                 <div class="w-12 h-px bg-gold/40 mx-auto my-3"></div>
                 <p class="text-gray-300 flex items-center justify-center text-sm">
                     <span class="text-xl mr-2">🥤</span> Complimentary refreshments will be provided to all registered participants.
@@ -262,15 +262,26 @@
 
                     <!-- QR Code Box Placeholder -->
                     <div class="flex flex-col items-center justify-center bg-black/40 border border-gold/10 rounded-xl p-6 text-center">
-                        <div class="w-40 h-40 bg-white rounded-lg flex items-center justify-center p-2 mb-2 relative group shadow-inner">
-                            <img src="images/qr-code.png" alt="Payment QR Code - Bhatt Bhargavi" class="w-full h-full object-contain filter contrast-125" onerror="this.style.display='none'; document.getElementById('qr-placeholder').style.display='flex';">
-                            <div id="qr-placeholder" class="hidden absolute inset-0 flex-col items-center justify-center text-black font-bold p-4 bg-gray-100 rounded-lg text-xs">
-                                <span>[ INSERT UPI QR CODE ]</span>
-                            </div>
-                        </div>
-                        <span class="text-xs text-gray-400">Scan to pay securely via GPay, PhonePe or Paytm</span>
-                    </div>
-                </div>
+   
+                        <!-- QR Image Container Box -->
+    <div class="w-40 h-40 bg-white rounded-lg flex items-center justify-center p-2 mb-2 relative group shadow-inner">
+        
+        <!-- Main QR Code Image -->
+        <img src="images/QR.jpeg" 
+             alt="Payment QR Code - Bhatt Bhargavi" 
+             class="w-full h-full object-contain block mx-auto transition-transform duration-300 group-hover:scale-105" 
+             onerror="this.style.display='none'; document.getElementById('qr-placeholder').style.display='flex';">
+        
+        <!-- Smart Fallback Display (Shows only if images/QR.jpeg cannot be found) -->
+        <div id="qr-placeholder" class="hidden absolute inset-0 flex flex-col items-center justify-center text-red-600 font-body font-bold p-2 bg-gray-100 rounded-lg text-xs">
+            <span class="text-[10px] uppercase tracking-wider text-gray-400 block mb-1">Error</span>
+            <span class="text-center">QR.jpeg Not Found</span>
+            <span class="text-[9px] text-gray-400 font-normal mt-1">Check images folder</span>
+        </div>
+        
+    </div>
+    <span class="text-xs text-gray-400 font-body">Scan to pay securely via GPay, PhonePe or Paytm</span>
+</div>
 
                 <!-- CALL TO ACTION BUTTONS -->
                 <div class="border-t border-gold/10 pt-8 flex flex-col items-center space-y-4">
